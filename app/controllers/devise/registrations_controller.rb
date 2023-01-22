@@ -12,7 +12,7 @@ class Devise::RegistrationsController < DeviseController
 
   # POST /resource
   def create
-    build_resource(sign_up_params)
+    build_resource(user_params)
 
     resource.save
       yield resource if block_given?
@@ -59,5 +59,11 @@ class Devise::RegistrationsController < DeviseController
   # temporary session data to the newly created user. 
   def build_resource(hash = {}) 
     self.resource = resource_class.new_with_session(hash, session)
-  end 
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:email, :password, :password_confirmation)
+  end
 end
